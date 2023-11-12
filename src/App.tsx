@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { ChangeEvent, useState } from 'react'
 import { Input } from './input/input';
 import { Tr } from './table/tr';
 import './App.css'
 
-function factorial(n) {
-    if (n == 0) return 1;
+// FIX: Limit.
+function factorial(n: number): number {
+    if (n <= 0) return 1;
+
     return n ? n * factorial(n - 1) : 1;
 }
 
-function mathP0(c, N, w) {
+function mathP0(c: number, N: number, w: number) {
     //P0
     var Nfac = factorial(N);
     var res = +0;
@@ -44,7 +44,7 @@ function mathP0(c, N, w) {
     return res;
 }
 
-function mathQ(c, N, w) {
+function mathQ(c: number, N: number, w: number) {
     var P0 = mathP0(c, N, w);
     var k = c + 1;
     var res = +0;
@@ -64,7 +64,7 @@ function mathQ(c, N, w) {
     return res;
 }
 
-function mathL(c, N, w) {
+function mathL(c: number, N: number, w: number) {
     var Nfac = factorial(N);
     var res = +0;
     var res1 = +0;
@@ -82,7 +82,7 @@ function mathL(c, N, w) {
         n++;
     }
 
-    n = c;
+    n = c + 1;
 
     while (n <= N) {
         var wpow = Math.pow(w, n);
@@ -99,147 +99,30 @@ function mathL(c, N, w) {
     return res;
 }
 
-/* $("#iNzn").hover(
-    function () {
-        $("#obozn").html(
-            "Количество знаков после запятой в результатах вывода"
-        );
-    },
-    function () {
-        $("#obozn").html("");
-    }
-);
-$("#iC").hover(
-    function () {
-        $("#obozn").html("Количество ремонтников в 1 эксперименте");
-    },
-    function () {
-        $("#obozn").html("");
-    }
-);
-$("#iC2").hover(
-    function () {
-        $("#obozn").html("Количество ремонтников в 2 эксперименте");
-    },
-    function () {
-        $("#obozn").html("");
-    }
-);
-$("#iC3").hover(
-    function () {
-        $("#obozn").html("Количество ремонтников в 3 эксперименте");
-    },
-    function () {
-        $("#obozn").html("");
-    }
-);
 
-$(".labelForResOutput").hover(
-    function () {
-        $("#obozn").html($(this).attr("name"));
-    },
-    function () {
-        $("#obozn").html("");
-    }
-); */
+interface Params {
+    L: number;
+    tno: number;
+    N: number;
+}
+
+function mathTp({ L, tno, N }: Params) {
+    return (L * tno) / (N - L);
+}
+
+function mathTc(Tp: number, tno: number) {
+    return Tp + tno;
+}
+
+function mathPe(Tc: number, tno: number) {
+    return tno / Tc;
+}
+
+function mathW(Tp: number, to: number) {
+    return Tp - to;
+}
 
 /* $("#go").click(function () {
-    var tno = +$("#tno").val();
-    var to = +$("#to").val();
-    var N = +$("#N").val();
-    var C = +$("#C").val();
-    var C2 = +$("#C2").val();
-    var C3 = +$("#C3").val();
-    var S1 = +$("#S1").val();
-    var S = +$("#S").val();
-    var Nzn = +$("#Nzn").val();
-
-    var w = to / tno; //1 .toFixed(Nzn)
-    var Po = mathP0(C, N, w);
-    var Q = mathQ(C, N, w);
-    var L = mathL(C, N, w);
-    $("#Po").html(Po.toFixed(Nzn));
-    $("#Q").html(Q.toFixed(Nzn));
-    $("#L").html(L.toFixed(Nzn));
-    $("#c").html(C.toFixed(0));
-    var U = L - Q;
-    var po = U / C;
-    var n = N - L;
-    $("#n").html(n.toFixed(Nzn));
-    $("#U").html(U.toFixed(Nzn));
-    $("#po").html(po.toFixed(Nzn));
-    var Tp = (L * tno) / (N - L);
-    var Tc = Tp + tno;
-    var pe = tno / Tc;
-    var W = Tp - to;
-    $("#pe").html(pe.toFixed(Nzn));
-    $("#W").html(W.toFixed(Nzn));
-    $("#Tp").html(Tp.toFixed(Nzn));
-    $("#Tc").html(Tc.toFixed(Nzn));
-    $("#drob").html((pe / po).toFixed(Nzn));
-    var Y = C * S1 + L * S;
-    var y1 = Y;
-    $("#Y").html(Y.toFixed(0));
-
-    Po = mathP0(C2, N, w); //2
-    Q = mathQ(C2, N, w);
-    L = mathL(C2, N, w);
-    $("#Po2").html(Po.toFixed(Nzn));
-    $("#Q2").html(Q.toFixed(Nzn));
-    $("#L2").html(L.toFixed(Nzn));
-    $("#c2").html(C2.toFixed(0));
-    U = L - Q;
-    po = U / C2;
-    n = N - L;
-    $("#n2").html(n.toFixed(Nzn));
-    $("#U2").html(U.toFixed(Nzn));
-    $("#po2").html(po.toFixed(Nzn));
-    Tp = (L * tno) / (N - L);
-    Tc = Tp + tno;
-    pe = tno / Tc;
-    W = Tp - to;
-    $("#pe2").html(pe.toFixed(Nzn));
-    $("#W2").html(W.toFixed(Nzn));
-    $("#Tp2").html(Tp.toFixed(Nzn));
-    $("#Tc2").html(Tc.toFixed(Nzn));
-    $("#drob2").html((pe / po).toFixed(Nzn));
-    Y = C2 * S1 + L * S;
-    var y2 = Y;
-    $("#Y2").html(Y.toFixed(0));
-
-    Po = mathP0(C3, N, w); //3
-    Q = mathQ(C3, N, w);
-    L = mathL(C3, N, w);
-    $("#Po3").html(Po.toFixed(Nzn));
-    $("#Q3").html(Q.toFixed(Nzn));
-    $("#L3").html(L.toFixed(Nzn));
-    $("#c3").html(C3.toFixed(0));
-    U = L - Q;
-    po = U / C3;
-    n = N - L;
-    $("#n3").html(n.toFixed(Nzn));
-    $("#U3").html(U.toFixed(Nzn));
-    $("#po3").html(po.toFixed(Nzn));
-    Tp = (L * tno) / (N - L);
-    Tc = Tp + tno;
-    pe = tno / Tc;
-    W = Tp - to;
-    $("#pe3").html(pe.toFixed(Nzn));
-    $("#W3").html(W.toFixed(Nzn));
-    $("#Tp3").html(Tp.toFixed(Nzn));
-    $("#Tc3").html(Tc.toFixed(Nzn));
-    $("#drob3").html((pe / po).toFixed(Nzn));
-    Y = C3 * S1 + L * S;
-    var y3 = Y;
-    $("#Y3").html(Y.toFixed(0));
-
-    $("#Y").css("background", "white");
-    $("#Y2").css("background", "white");
-    $("#Y3").css("background", "white");
-    var cif = [y1, y2, y3].indexOf(Math.min.apply(null, [y1, y2, y3])) + 1;
-    if (cif == 1) cif = "";
-    $("#Y" + cif).css("background", "#1d7874");
-
     $("#container").html("");
     var chart = anychart.line([
         { x: C, value: y1 },
@@ -271,90 +154,147 @@ $(".labelForResOutput").hover(
     $(".anychart-credits").hide();
 }); */
 
-function App() {
-  const [count, setCount] = useState(0)
+const DEFAULT = {
+    tno: 600,
+    to: 8,
+    N: 50,
+    C1: 1,
+    C2: 2,
+    C3: 3,
+    S1: 200,
+    S: 1500,
+    Nzn: 3,
+};
 
-  const [tno, setTno] = useState(150)
-  const onTnoChange = (e: React) => {
+/* interface InputError{ label: string, message: string }; */
+interface InputError { label: string, message: string };
+
+function App() {
+  const [errors, setErrors] = useState<InputError[]>([])
+  const setError = (error: InputError) => setErrors((errors) => [...errors, error])
+  const clearErrorsForInput = (label: string) => setErrors((errors) => errors.filter((error) => error.label !== label))
+
+  const [tno, setTno] = useState(DEFAULT.tno)
+  const onTnoChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTno(Number(e.target.value))
   }
 
-  const [to, setTo] = useState(15)
-  const onToChange = (e: React) => {
+  const [to, setTo] = useState(DEFAULT.to)
+  const onToChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTo(Number(e.target.value))
   }
 
-  const [N, setN] = useState(10)
-  const onNChange = (e: React) => {
-    setN(Number(e.target.value))
+  const [N, setN] = useState(DEFAULT.N)
+  const onNChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const N = Number(e.target.value);
+
+    if (N > 101) {
+        return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 100" })
+    }
+
+    if (N < 0) {
+        return setError({ label: "N", message: "Сделайте, пожалуйста, N неотрицательным" })
+    }
+
+    clearErrorsForInput('N')
+    setN(N)
   }
 
-  const [C1, setC1] = useState(2)
-  const onC1Change = (e: React) => {
+  const [C1, setC1] = useState(DEFAULT.C1)
+  const onC1Change = (e: ChangeEvent<HTMLInputElement>) => {
     setC1(Number(e.target.value))
   }
 
-  const [C2, setC2] = useState(3)
-  const onC2Change = (e: React) => {
+  const [C2, setC2] = useState(DEFAULT.C2)
+  const onC2Change = (e: ChangeEvent<HTMLInputElement>) => {
     setC2(Number(e.target.value))
   }
 
-  const [C3, setC3] = useState(4)
-  const onC3Change = (e: React) => {
+  const [C3, setC3] = useState(DEFAULT.C3)
+  const onC3Change = (e: ChangeEvent<HTMLInputElement>) => {
     setC3(Number(e.target.value))
   }
 
-  const [S1, setS1] = useState(250)
-  const onS1Change = (e: React) => {
+  const [S1, setS1] = useState(DEFAULT.S1)
+  const onS1Change = (e: ChangeEvent<HTMLInputElement>) => {
     setS1(Number(e.target.value))
   }
 
-  const [S, setS] = useState(1000)
-  const onSChange = (e: React) => {
+  const [S, setS] = useState(DEFAULT.S)
+  const onSChange = (e: ChangeEvent<HTMLInputElement>) => {
     setS(Number(e.target.value))
   }
 
-  const [Nzn, setNzn] = useState(5)
-  const onNznChange = (e: React) => {
-    setNzn(Number(e.target.value))
-  }
+  const [Nzn, setNzn] = useState(DEFAULT.Nzn)
+  const onNznChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const Nzn= Number(e.target.value);
 
-  useEffect(() => {
-    console.log({ tno })
-  }, [tno])
+    if (Nzn > 10) {
+        return setError({ label: "Nzn", message: "Слишком большое значение для Nzn! Сделайте, пожалуйста, его меньше 10" })
+    }
+
+    clearErrorsForInput('Nzn')
+    setNzn(Nzn)
+  }
 
     const w = to / tno;
 
     const formatValue = (value: number) => value.toFixed(Math.max(Nzn, 0))
 
+    const CValues = [C1, C2, C3];
+
+    const QValues = CValues.map((Ci) => mathQ(Ci, N, w));
+    const LValues = CValues.map((Ci) => mathL(Ci, N, w));
+
+    const UValues = CValues.map((_, i) => LValues[i] - QValues[i]);
+    const poValues = CValues.map((Ci, i) => UValues[i] / Ci);
+    const nValues = LValues.map((Li) => N - Li);
+
+    const TpValues = LValues.map((Li) => mathTp({ L: Li, tno, N }));
+    const TcValues = TpValues.map((Tpi) => mathTc(Tpi, tno));
+    const peValues = TcValues.map((Tci) => mathPe(Tci, tno));
+    const WValues = TpValues.map((Tpi) => mathW(Tpi, to));
+
+    const hasErrors = (label: string) => !!errors.find((error) => error.label === label);
+
   return (
     <>
       <form className="read-the-docs">
-        <Input type="number" label="tno" value={tno} onChange={onTnoChange}/>
-        <Input type="number" label="to" value={to} onChange={onToChange}/>
-        <Input type="number" label="N" value={N} onChange={onNChange}/>
-        <Input type="number" label="C1" value={C1} onChange={onC1Change}/>
-        <Input type="number" label="C2" value={C2} onChange={onC2Change}/>
-        <Input type="number" label="C3" value={C3} onChange={onC3Change}/>
-        <Input type="number" label="S1" value={S1} onChange={onS1Change}/>
-        <Input type="number" label="S" value={S} onChange={onSChange}/>
-        <Input type="number" label="Nzn" value={Nzn} onChange={onNznChange}/>
+        {[
+            { label: 'tno', value: tno, onChange: onTnoChange },
+        { label: "to", value: to, onChange: onToChange },
+        { label: "N", value: N, onChange: onNChange },
+        { label: "C1", value: C1, onChange: onC1Change },
+        { label: "C2", value: C2, onChange: onC2Change },
+        { label: "C3", value: C3, onChange: onC3Change },
+        { label: "S1", value: S1, onChange: onS1Change },
+        { label: "S", value: S, onChange: onSChange },
+        { label: "Nzn", value: Nzn, onChange: onNznChange },
+        ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)}
       </form>
       <table>
-        <Tr header={true} label="C" values={[C1, C2, C3]} />
-        <Tr formatValue={formatValue} label="w" values={[w]} />
-        <Tr formatValue={formatValue} label="Po" values={[mathP0(C1, N, w)]} />
-        <Tr formatValue={formatValue} label="Q" values={[N]} />
-        <Tr formatValue={formatValue} label="L" values={[N]} />
-        <Tr formatValue={formatValue} label="U" values={[N]} />
-        <Tr formatValue={formatValue} label="po" values={[N]} />
-        <Tr formatValue={formatValue} label="n" values={[N]} />
-        <Tr formatValue={formatValue} label="pe" values={[N]} />
-        <Tr formatValue={formatValue} label="W" values={[N]} />
-        <Tr formatValue={formatValue} label="Tp" values={[N]} />
-        <Tr formatValue={formatValue} label="Tc" values={[N]} />
-        <Tr formatValue={formatValue} label="pe/po" values={[N]} />
-        <Tr formatValue={formatValue} label="Y" values={[N]} />
+       <thead>
+          <Tr header={true} label="C" values={CValues} />
+        </thead>
+
+        <tbody>
+            <Tr formatValue={formatValue} label="Po" values={CValues.map((Ci) => mathP0(Ci, N, w))} />
+            <Tr formatValue={formatValue} label="Q" values={QValues} />
+            <Tr formatValue={formatValue} label="L" values={LValues} />
+
+            <Tr formatValue={formatValue} label="U" values={UValues} />
+            <Tr formatValue={formatValue} label="po" values={poValues} />
+            <Tr formatValue={formatValue} label="n" values={nValues} />
+
+            <Tr formatValue={formatValue} label="pe" values={peValues} />
+            <Tr formatValue={formatValue} label="W" values={WValues} />
+            <Tr formatValue={formatValue} label="Tp" values={TpValues} />
+            <Tr formatValue={formatValue} label="Tc" values={TcValues} />
+
+            <Tr formatValue={formatValue} label="pe/po" values={peValues.map((pei, i) => pei / poValues[i])} />
+
+            <Tr formatValue={formatValue} label="Y" values={CValues.map((Ci, i) => Ci * S1 + LValues[i] * S)} />
+        </tbody>
       </table>
     </>
   )

@@ -1,0 +1,7 @@
+.label_error {
+    color: red;
+}
+
+.input_error {
+    outline: 2px solid red;
+}

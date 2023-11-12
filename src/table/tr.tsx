@@ -1,20 +1,18 @@
-import React from "react";
-
 export interface TrProps<T> {
     label: string;
     values: T[];
-    header: boolean;
+    header?: boolean;
     formatValue?: (value: T) => string;
 }
 
-export const Tr = (props: TrProps) => {
+export const Tr = <T,>(props: TrProps<T>) => {
     return (
         <tr>
             {props.header ? <th>{props.label}</th> : <td>{props.label}</td>}
-            {props.values.map((value) => {
-                const formattedValue = !props.formatValue ? value : props.formatValue(value);
+            {props.values.map((value, i) => {
+                const formattedValue = !props.formatValue ? String(value) : props.formatValue(value);
 
-                return props.header ?<th>{formattedValue}</th> : <td>{formattedValue}</td>
+                return props.header ?<th key={`${props.label}-${i}`}>{formattedValue}</th> : <td key={`${props.label}-${i}`}>{formattedValue}</td>
             })}
         </tr>
     )

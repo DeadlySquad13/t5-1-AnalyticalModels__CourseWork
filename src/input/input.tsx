@@ -1,17 +1,17 @@
-import React from "react"
+import { InputHTMLAttributes } from 'react';
 
-export interface InputProps {
+import './input.css'
+
+export interface InputProps extends Pick<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'>{
     label: string; 
-    type: "number";
-    value: number | string;
-    onChange: (e) => void;
+    isError: boolean;
 }
 
-export const Input = ({ label, ...inputProps }: InputProps) => {
+export const Input = ({ label, isError, ...inputProps }: InputProps) => {
     return (
         <>
-            <label>{`${label}:`}</label>
-            <input {...inputProps} />
+            <label className={isError ? 'label_error' : ''}>{`${label}:`}</label>
+            <input className={isError ? 'input_error' : ''} type="number" {...inputProps} />
         </>
     )
 }
