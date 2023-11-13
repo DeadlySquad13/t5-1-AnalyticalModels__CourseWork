@@ -1,0 +1,20 @@
+a {
+    padding: 16px;
+    background-color: teal;
+    color: white;
+    outline: none;
+    text-decoration: none;
+}
+
+a:hover {
+    color: white;
+    font-weight: bold;
+}
+
+a:visited {
+    color: white;
+}
+
+a:visited:hover {
+    color: white;
+}
