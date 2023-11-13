@@ -166,7 +166,6 @@ const DEFAULT = {
     Nzn: 3,
 };
 
-/* interface InputError{ label: string, message: string }; */
 interface InputError { label: string, message: string };
 
 function App() {
@@ -262,14 +261,14 @@ function App() {
       <form className="read-the-docs">
         {[
             { label: 'tno', value: tno, onChange: onTnoChange },
-        { label: "to", value: to, onChange: onToChange },
-        { label: "N", value: N, onChange: onNChange },
-        { label: "C1", value: C1, onChange: onC1Change },
-        { label: "C2", value: C2, onChange: onC2Change },
-        { label: "C3", value: C3, onChange: onC3Change },
-        { label: "S1", value: S1, onChange: onS1Change },
-        { label: "S", value: S, onChange: onSChange },
-        { label: "Nzn", value: Nzn, onChange: onNznChange },
+            { label: "to", value: to, onChange: onToChange },
+            { label: "N", value: N, onChange: onNChange },
+            { label: "C1", value: C1, onChange: onC1Change },
+            { label: "C2", value: C2, onChange: onC2Change },
+            { label: "C3", value: C3, onChange: onC3Change },
+            { label: "S1", value: S1, onChange: onS1Change },
+            { label: "S", value: S, onChange: onSChange },
+            { label: "Nzn", value: Nzn, onChange: onNznChange },
         ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)}
       </form>
       <table>
