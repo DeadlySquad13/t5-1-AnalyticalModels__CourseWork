@@ -14,7 +14,7 @@ export const TitlePage = () => {
             <br />
             <div className='links'>
                 <Link href="/service">Перейти к ремонтнику</Link>
-                <Link href="/server">Перейти к асоиу</Link>
+                <Link href="/server">Перейти к АСОИУ</Link>
             </div>
             <br />
             <br />

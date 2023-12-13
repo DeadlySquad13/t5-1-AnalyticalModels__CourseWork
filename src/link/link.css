@@ -1,4 +1,21 @@
-.link {
-    display: inline-block;
-    min-width: 200px;
+.link, .link:visited {
+  font-weight: 500;
+  text-decoration: inherit;
+  outline: none;
+  text-decoration: none;
+}
+.link:hover {
+    font-weight: 600;
+}
+
+.link_normal {
+  display: inline-block;
+  padding: 16px;
+  min-width: 200px;
+  background-color: teal;
+  color: white;
+}
+
+.link_back, .link_back:visited {
+  color: teal;
 }

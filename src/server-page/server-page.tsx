@@ -218,19 +218,19 @@ export function ServerPage() {
                 </thead>
 
                 <tbody>
-                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="Po" values={[stationLoad]} />
+                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="P_0" values={[stationLoad]} />
                     <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="Q" values={[loadOfStationUser]} />
                     <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="L" values={[meanWorkingComputers]} />
 
                     <Tr description="Загрузка канала" formatValue={formatValue} label="U" values={[rok]} />
-                    <Tr description="Загрузка процессора" formatValue={formatValue} label="po" values={[ropr]} />
+                    <Tr description="Загрузка процессора" formatValue={formatValue} label="p_o" values={[ropr]} />
                     <Tr description="Загрузка дисков" formatValue={formatValue} label="n" values={[rod]} />
 
-                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="pe" values={[Tcycle]} />
+                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="p_e" values={[Tcycle]} />
                     <Tr description="Ср. время реакции системы" formatValue={formatValue} label="W" values={[Treac]} />
 
-                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="Tp" values={[Lstart]} />
-                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="Tc" values={[Lf1]} />
+                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="T_p" values={[Lstart]} />
+                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="T_c" values={[Lf1]} />
 
                     <Tr description="Количество итераций" label="Y" values={[n]} />
                 </tbody>
