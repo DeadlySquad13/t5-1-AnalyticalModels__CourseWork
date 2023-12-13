@@ -170,7 +170,7 @@ const DEFAULT = {
 
 interface InputError { label: string, message: string };
 
-function MainPage() {
+function ServicePage() {
     const [errors, setErrors] = useState<InputError[]>([])
     const setError = (error: InputError) => setErrors((errors) => [...errors, error])
     const clearErrorsForInput = (label: string) => setErrors((errors) => errors.filter((error) => error.label !== label))
@@ -327,11 +327,30 @@ function MainPage() {
     )
 }
 
+const getPathParts = (path: string) => path.split('/').filter(Boolean);
+
+const resolvePathToRoot = (path: string, rootPath: string) => {
+    const pathParts = getPathParts(path)
+    const baseUrlParts = getPathParts(rootPath)
+
+    const pathPartsWithoutBaseUrl = pathParts.filter((part) => !baseUrlParts.includes(part))
+    const pathWithoutBaseUrl = `/${pathPartsWithoutBaseUrl.join('/')}`
+
+    return pathWithoutBaseUrl;
+}
+
+const resolvePathToBaseUrl = (path: string) => resolvePathToRoot(path, import.meta.env.BASE_URL)
+
 const App = () => {
-    switch (window.location.pathname) {
+    const path = window.location.pathname;
+
+    const resolvedPath = resolvePathToBaseUrl(path)
+
+    switch (resolvedPath) {
         case '/': return <TitlePage />
-        case '/main': return <MainPage />
-        default: return <span>key</span>
+        case '/service': return <ServicePage />
+        case '/server': return <span>ServerPage</span>
+        default: return <span>no route with path {resolvedPath}</span>
     }
 }
 
