@@ -191,15 +191,15 @@ export function ServerPage() {
             <form className="read-the-docs">
                 <h3 style={{ marginBottom: 0 }}>Входные данные</h3>
                 <span>{[
-                    { description: '', id: 'N', value: N, onChange: onNChange },
-                    { description: '', id: "tk", label: 't_k', value: tk, onChange: onTkChange },
-                    { description: '', id: "td", label: 't_д', value: td, onChange: onTdChange },
-                    { description: '', id: "T0", label: 'T_0', value: T0, onChange: onT0Change },
-                    { description: '', id: "C", value: C, onChange: onCChange },
-                    { description: '', id: "m", value: m, onChange: onMChange },
-                    { description: '', id: "Tp", label: 'T_p', value: Tp, onChange: onTpChange },
-                    { description: '', id: "tpr", label: 't_пр', value: tpr, onChange: onTprChange },
-                    { description: '', id: "gamma", label: 'γ', value: gamma, onChange: onGammaChange },
+                    { description: 'Число рабочих станций сети', id: 'N', value: N, onChange: onNChange },
+                    { description: 'Ср. время передачи запроса по каналу', id: "tk", label: 't_k', value: tk, onChange: onTkChange },
+                    { description: 'Ср. время обработки запроса в диске сервера', id: "td", label: 't_д', value: td, onChange: onTdChange },
+                    { description: 'Ср. время дообработки на рабочей станции сети запроса от этой станции к базе данных на сервере', id: "T0", label: 'T_0', value: T0, onChange: onT0Change },
+                    { description: 'Число процессоров сервера', id: "C", value: C, onChange: onCChange },
+                    { description: 'Количество дисков в сервере', id: "m", value: m, onChange: onMChange },
+                    { description: 'Среднее значение времени реакции системы', id: "Tp", label: 'T_реак', value: Tp, onChange: onTpChange },
+                    { description: 'Ср. время обработки запроса в ЦП сервера', id: "tpr", label: 't_пр', value: tpr, onChange: onTprChange },
+                    { description: 'Вероятность обращения запроса к ЦП после обработки на диске', id: "gamma", label: 'γ', value: gamma, onChange: onGammaChange, step: 0.01 },
                 ].map((inputProps) => <Input isError={hasErrors(inputProps.id)} key={inputProps.id} {...inputProps} />)
                 }</span>
                 <h3 style={{ marginBottom: 0 }}>Параметры управления</h3>
