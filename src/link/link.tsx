@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-  
+import './link.css';
 
 export interface LinkProps {
     href: string;
@@ -14,5 +14,7 @@ export const Link = ({ href, children }: LinkProps) => {
     const hrefWithBaseUrl = formattedBaseUrl + formattedHref
     console.log(hrefWithBaseUrl)
 
-    return <a href={hrefWithBaseUrl}>{children}</a>;
+    return <a className='link' href={hrefWithBaseUrl}>{children}</a>;
 };
+
+

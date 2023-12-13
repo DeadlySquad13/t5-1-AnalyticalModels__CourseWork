@@ -1,6 +1,7 @@
 import { Link } from '../link/link'
 import './title-page.css'
 
+
 export const TitlePage = () => {
     return (
         <section>
@@ -11,7 +12,10 @@ export const TitlePage = () => {
             <span>Выполнено студентом ИУ5-12М</span>
             <h2>Пакало Александром Сергеевичем</h2>
             <br />
-            <Link href="/main">Перейти к работе</Link>
+            <div className='links'>
+                <Link href="/service">Перейти к ремонтнику</Link>
+                <Link href="/server">Перейти к асоиу</Link>
+            </div>
             <br />
             <br />
             <br />
