@@ -123,38 +123,6 @@ function mathW(Tp: number, to: number) {
     return Tp - to;
 }
 
-/* $("#go").click(function () {
-    $("#container").html("");
-    var chart = anychart.line([
-        { x: C, value: y1 },
-        { x: (C + C2) / 2, value: (y1 + y2) / 2 - (y1 - y2) / 4 },
-        { x: C2, value: y2 },
-        { x: (C2 + C3) / 2, value: (y2 + y3) / 2 + (y2 - y3) / 4 },
-        { x: C3, value: y3 },
-    ]);
-    var yTitle = chart.yAxis().title();
-    yTitle.enabled(true);
-    yTitle.text("Затраты, руб/час");
-    yTitle.align("top");
-    yTitle.orientation("top");
-    yTitle.fontSize(15);
-    yTitle.fontColor("black");
-    var xTitle = chart.xAxis().title();
-    xTitle.enabled(true);
-    xTitle.text("Количество ремонтников");
-    xTitle.align("right");
-    xTitle.orientation("bottom");
-    xTitle.fontSize(15);
-    xTitle.fontColor("black");
-    chart.title("");
-    chart.title().align("center");
-    chart.title().fontSize(25);
-    chart.title().fontColor("black");
-    chart.container("container").draw();
-
-    $(".anychart-credits").hide();
-}); */
-
 const DEFAULT = {
     tno: 600,
     to: 8,
@@ -231,6 +199,10 @@ export function ServicePage() {
 
         if (Nzn > 10) {
             return setError({ label: "Nzn", message: "Слишком большое значение для Nzn! Сделайте, пожалуйста, его меньше 10" })
+        }
+
+        if (Nzn < 0.5) {
+            return setError({ label: "Nzn", message: "Слишком малое значение для Nzn! Сделайте, пожалуйста, его больше 1" })
         }
 
         clearErrorsForInput('Nzn')
