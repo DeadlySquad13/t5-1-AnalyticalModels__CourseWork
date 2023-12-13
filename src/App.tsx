@@ -170,7 +170,7 @@ const DEFAULT = {
 
 interface InputError { label: string, message: string };
 
-function MainPage() {
+function ServicePage() {
     const [errors, setErrors] = useState<InputError[]>([])
     const setError = (error: InputError) => setErrors((errors) => [...errors, error])
     const clearErrorsForInput = (label: string) => setErrors((errors) => errors.filter((error) => error.label !== label))
@@ -344,10 +344,13 @@ const resolvePathToBaseUrl = (path: string) => resolvePathToRoot(path, import.me
 const App = () => {
     const path = window.location.pathname;
 
-    switch (resolvePathToBaseUrl(path)) {
+    const resolvedPath = resolvePathToBaseUrl(path)
+
+    switch (resolvedPath) {
         case '/': return <TitlePage />
-        case '/main': return <MainPage />
-        default: return <span>key</span>
+        case '/service': return <ServicePage />
+        case '/server': return <span>ServerPage</span>
+        default: return <span>no route with path {resolvedPath}</span>
     }
 }
 

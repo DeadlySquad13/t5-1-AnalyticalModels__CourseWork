@@ -1,3 +1,4 @@
+import { Link } from '../link/link'
 import './title-page.css'
 
 export const TitlePage = () => {
@@ -10,7 +11,7 @@ export const TitlePage = () => {
             <span>Выполнено студентом ИУ5-12М</span>
             <h2>Пакало Александром Сергеевичем</h2>
             <br />
-            <a href="/main">Перейти к работе</a>
+            <Link href="/main">Перейти к работе</Link>
             <br />
             <br />
             <br />
