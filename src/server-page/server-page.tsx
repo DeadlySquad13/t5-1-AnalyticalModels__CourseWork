@@ -218,21 +218,21 @@ export function ServerPage() {
                 </thead>
 
                 <tbody>
-                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="P_0" values={[stationLoad]} />
-                    <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="Q" values={[loadOfStationUser]} />
-                    <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="L" values={[meanWorkingComputers]} />
+                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="ρ_PC" values={[stationLoad]} />
+                    <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="ρ_польз" values={[loadOfStationUser]} />
+                    <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="N_PC" values={[meanWorkingComputers]} />
 
-                    <Tr description="Загрузка канала" formatValue={formatValue} label="U" values={[rok]} />
-                    <Tr description="Загрузка процессора" formatValue={formatValue} label="p_o" values={[ropr]} />
-                    <Tr description="Загрузка дисков" formatValue={formatValue} label="n" values={[rod]} />
+                    <Tr description="Загрузка канала" formatValue={formatValue} label="ρ_к" values={[rok]} />
+                    <Tr description="Загрузка процессора" formatValue={formatValue} label="ρ_пр" values={[ropr]} />
+                    <Tr description="Загрузка дисков" formatValue={formatValue} label="ρ_д" values={[rod]} />
 
-                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="p_e" values={[Tcycle]} />
-                    <Tr description="Ср. время реакции системы" formatValue={formatValue} label="W" values={[Treac]} />
+                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="T_цикла" values={[Tcycle]} />
+                    <Tr description="Ср. время реакции системы" formatValue={formatValue} label="T_р" values={[Treac]} />
 
-                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="T_p" values={[Lstart]} />
-                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="T_c" values={[Lf1]} />
+                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="λ_ф1" values={[Lstart]} />
+                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="λ_ф" values={[Lf1]} />
 
-                    <Tr description="Количество итераций" label="Y" values={[n]} />
+                    <Tr description="Количество итераций" label="n" values={[n]} />
                 </tbody>
             </table>
         </>

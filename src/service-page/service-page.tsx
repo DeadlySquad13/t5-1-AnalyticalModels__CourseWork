@@ -281,15 +281,15 @@ export function ServicePage() {
                     <Tr description="Ср. количество компьютеров в системе" formatValue={formatValue} label="L" values={LValues} />
 
                     <Tr description="Ср. количество компьютеров на ремонте" formatValue={formatValue} label="U" values={UValues} />
-                    <Tr description="Коэффициент загрузки ремонтников" formatValue={formatValue} label="p_o" values={poValues} />
+                    <Tr description="Коэффициент загрузки ремонтников" formatValue={formatValue} label="ρ_o" values={poValues} />
                     <Tr description="Ср. количество исправных компьютеров" formatValue={formatValue} label="n" values={nValues} />
 
-                    <Tr description="Коэффициент загрузки компьютеров" formatValue={formatValue} label="p_e" values={peValues} />
+                    <Tr description="Коэффициент загрузки компьютеров" formatValue={formatValue} label="ρ_e" values={peValues} />
                     <Tr description="Ср. время нахождение в очереди" formatValue={formatValue} label="W" values={WValues} />
                     <Tr description="Ср. время пребывания компьютера в системе" formatValue={formatValue} label="Tp" values={TpValues} />
                     <Tr description="Ср. время цикла для компьютера" formatValue={formatValue} label="T_c" values={TcValues} />
 
-                    <Tr description="Отношение загрузки к ремонту" formatValue={formatValue} label="pe/po" values={peValues.map((pei, i) => pei / poValues[i])} />
+                    <Tr description="Отношение загрузки к ремонту" formatValue={formatValue} label="ρe/ρo" values={peValues.map((pei, i) => pei / poValues[i])} />
 
                     <Tr description="Затраты" formatValue={formatValue} label="Y" values={YValues} />
                 </tbody>
