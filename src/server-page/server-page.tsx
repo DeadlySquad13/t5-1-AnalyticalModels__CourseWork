@@ -10,96 +10,6 @@ function factorial(n: number): number {
     return n ? n * factorial(n - 1) : 1;
 }
 
-function mathP0(c: number, N: number, w: number) {
-    //P0
-    var Nfac = factorial(N);
-    var res = +0;
-    var res1 = +0;
-    var res2 = +0;
-
-    var n = +0;
-
-    while (n <= c) {
-        var wpow = Math.pow(w, n);
-        var nfac = factorial(n);
-        var Nnfac = factorial(N - n);
-
-        res1 = res1 + (Nfac * wpow) / (nfac * Nnfac);
-        n++;
-    }
-
-    while (n <= N) {
-        var wpow = Math.pow(w, n);
-        var cfac = factorial(c);
-        var Nnfac = factorial(N - n);
-        var cpow = Math.pow(c, n - c);
-
-        res2 = res2 + (Nfac * wpow) / (cpow * cfac * Nnfac);
-        n++;
-    }
-
-    res = res1 + res2;
-    res = 1 / res;
-
-    return res;
-}
-
-function mathQ(c: number, N: number, w: number) {
-    var P0 = mathP0(c, N, w);
-    var k = c + 1;
-    var res = +0;
-
-    var Nfac = factorial(N);
-    var cfac = factorial(c);
-
-    while (k <= N) {
-        // выводит 0, затем 1, затем 2
-        var wpow = Math.pow(w, k);
-        var cpow = Math.pow(c, k - c);
-        var Nkfac = factorial(N - k);
-        res = res + ((k - c) * Nfac * P0 * wpow) / (cpow * cfac * Nkfac);
-        k++;
-    }
-
-    return res;
-}
-
-function mathL(c: number, N: number, w: number) {
-    var Nfac = factorial(N);
-    var res = +0;
-    var res1 = +0;
-    var res2 = +0;
-    var P0 = mathP0(c, N, w);
-
-    var n = +1;
-
-    while (n <= c) {
-        var wpow = Math.pow(w, n);
-        var nfac = factorial(n);
-        var Nnfac = factorial(N - n);
-
-        res1 = res1 + ((Nfac * wpow) / (nfac * Nnfac)) * n * P0;
-        n++;
-    }
-
-    n = c + 1;
-
-    while (n <= N) {
-        var wpow = Math.pow(w, n);
-        var cfac = factorial(c);
-        var Nnfac = factorial(N - n);
-        var cpow = Math.pow(c, n - c);
-
-        res2 = res2 + ((Nfac * wpow) / (cpow * cfac * Nnfac)) * n * P0;
-        n++;
-    }
-
-    res = res1 + res2;
-
-    return res;
-}
-
-
 interface Params {
     L: number;
     tno: number;
@@ -170,7 +80,9 @@ const DEFAULT = {
     Nzn: 3,
 };
 
-interface InputError { label: string, message: string };
+interface InputError { label: string, message: string }
+
+const MAX_ITERATIONS = 99999;
 
 export function ServerPage() {
     const [errors, setErrors] = useState<InputError[]>([])
@@ -264,6 +176,53 @@ export function ServerPage() {
 
     const hasErrors = (label: string) => !!errors.find((error) => error.label === label);
 
+    const Pi = 1 / m;
+    const B = 1 / (1 - gamma);
+    const m1 = 1 / (2*tk);
+    const m2 = C / (B*tpr);
+    const m3 = 1 / (B*Pi*td);
+    const m4 = (N - 1) / N
+    const min = Math.min(m1, m2, m3)
+    let Lf1 = K1 * min * m4
+
+    const Lstart = Lf1;
+    let Tk = 0;
+    let Tpr = 0;
+    let Td = 0;
+    let n = 0;
+    let Lf = 0;
+
+    while (true) {
+        n++;
+        Tk = (2*tk) / (1 - 2*Lf1*tk)
+        const Tnpsub = (B * Lf1 * tpr / C)**C;
+        Tpr = (B*tpr) / (1 - Tnpsub);
+        Td = (B*td) / (1 - B*Pi*Lf1*td);
+
+        Lf = (N-1)/(T0 + Tp + Tk + Tpr + Td);
+        const d = Math.abs(Lf1 - Lf) / Lf;
+
+        if (d < delta || n == MAX_ITERATIONS) {
+            break;
+        }
+
+        Lf1 = Lf1 - (Lf1 - Lf) / K2;
+    }
+
+    const Tcycle = T0+Tp+Tk+Tpr+Td;
+    const Treac = Tcycle - Tp;
+
+    const rok = 2 * N / Tcycle * tk;
+
+    const ropr = B * N / Tcycle * tpr / C;
+
+    const rod = B * N / Tcycle * Pi * td;
+
+
+    const stationLoad = (T0 + Tp) / Tcycle;
+    const loadOfStationUser = Tp / Tcycle;
+    const meanWorkingComputers = N * (T0 + Tp) / Tcycle
+
     return (
         <>
             <h3>Выполнил: Пакало Александр Сергеевич, студент ИУ5-12М</h3>
@@ -297,21 +256,21 @@ export function ServerPage() {
                 </thead>
 
                 <tbody>
-                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="Po" values={[1]} />
-                    <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="Q" values={[1]} />
-                    <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="L" values={[1]} />
+                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="Po" values={[stationLoad]} />
+                    <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="Q" values={[loadOfStationUser]} />
+                    <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="L" values={[meanWorkingComputers]} />
 
-                    <Tr description="Загрузка канала" formatValue={formatValue} label="U" values={[1]} />
-                    <Tr description="Загрузка процессора" formatValue={formatValue} label="po" values={[1]} />
-                    <Tr description="Загрузка дисков" formatValue={formatValue} label="n" values={[1]} />
+                    <Tr description="Загрузка канала" formatValue={formatValue} label="U" values={[rok]} />
+                    <Tr description="Загрузка процессора" formatValue={formatValue} label="po" values={[ropr]} />
+                    <Tr description="Загрузка дисков" formatValue={formatValue} label="n" values={[rod]} />
 
-                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="pe" values={[1]} />
-                    <Tr description="Ср. время реакции системы" formatValue={formatValue} label="W" values={[1]} />
+                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="pe" values={[Tcycle]} />
+                    <Tr description="Ср. время реакции системы" formatValue={formatValue} label="W" values={[Treac]} />
 
-                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="Tp" values={[1]} />
-                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="Tc" values={[1]} />
+                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="Tp" values={[Lstart]} />
+                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="Tc" values={[Lf1]} />
 
-                    <Tr description="Количество итераций" formatValue={formatValue} label="Y" values={[1]} />
+                    <Tr description="Количество итераций" label="Y" values={[n]} />
                 </tbody>
             </table>
         </>
