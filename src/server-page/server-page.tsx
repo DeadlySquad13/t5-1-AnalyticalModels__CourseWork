@@ -191,25 +191,25 @@ export function ServerPage() {
             <form className="read-the-docs">
                 <h3 style={{ marginBottom: 0 }}>Входные данные</h3>
                 <span>{[
-                    { description: '', label: 'N', value: N, onChange: onNChange },
-                    { description: '', label: "tk", value: tk, onChange: onTkChange },
-                    { description: '', label: "tд", value: td, onChange: onTdChange },
-                    { description: '', label: "T0", value: T0, onChange: onT0Change },
-                    { description: '', label: "C", value: C, onChange: onCChange },
-                    { description: '', label: "m", value: m, onChange: onMChange },
-                    { description: '', label: "Tp", value: Tp, onChange: onTpChange },
-                    { description: '', label: "tпр", value: tpr, onChange: onTprChange },
-                    { description: '', label: "gamma", value: gamma, onChange: onGammaChange },
-                ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)
+                    { description: '', id: 'N', value: N, onChange: onNChange },
+                    { description: '', id: "tk", label: 't_k', value: tk, onChange: onTkChange },
+                    { description: '', id: "td", label: 't_д', value: td, onChange: onTdChange },
+                    { description: '', id: "T0", label: 'T_0', value: T0, onChange: onT0Change },
+                    { description: '', id: "C", value: C, onChange: onCChange },
+                    { description: '', id: "m", value: m, onChange: onMChange },
+                    { description: '', id: "Tp", label: 'T_p', value: Tp, onChange: onTpChange },
+                    { description: '', id: "tpr", label: 't_пр', value: tpr, onChange: onTprChange },
+                    { description: '', id: "gamma", label: 'γ', value: gamma, onChange: onGammaChange },
+                ].map((inputProps) => <Input isError={hasErrors(inputProps.id)} key={inputProps.id} {...inputProps} />)
                 }</span>
                 <h3 style={{ marginBottom: 0 }}>Параметры управления</h3>
                 <h4 style={{ marginTop: 0, marginBottom: 0 }}>Точность вычислений</h4>
                 <span>{[
-                    { label: 'K1', value: K1, onChange: onK1Change, step: 0.001 },
-                    { label: "K2", value: K2, onChange: onK2Change, step: 10 },
-                    { label: "delta", value: delta, onChange: onDeltaChange, step: 0.01 },
-                    { description: 'Количество знаков после запятой', label: "Nzn", value: Nzn, onChange: onNznChange},
-                ].map((inputProps) => <Input  isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)}
+                    { id: 'K1', label: 'K_1', value: K1, onChange: onK1Change, step: 0.001 },
+                    { id: "K2", label: 'K_2', value: K2, onChange: onK2Change, step: 10 },
+                    { id: "delta", label: 'Δ', value: delta, onChange: onDeltaChange, step: 0.01 },
+                    { description: 'Количество знаков после запятой', id: "Nzn", label: 'N_зн', value: Nzn, onChange: onNznChange},
+                ].map((inputProps) => <Input  isError={hasErrors(inputProps.id)} key={inputProps.id} {...inputProps} />)}
                 </span>
             </form >
             <table>

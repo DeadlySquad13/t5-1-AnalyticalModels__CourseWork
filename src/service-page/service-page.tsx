@@ -135,7 +135,7 @@ const DEFAULT = {
     Nzn: 3,
 };
 
-interface InputError { label: string, message: string };
+interface InputError { label: string, message: string }
 
 export function ServicePage() {
     const [errors, setErrors] = useState<InputError[]>([])
@@ -254,20 +254,20 @@ export function ServicePage() {
             <form className="read-the-docs">
                 <h3 style={{ marginBottom: 0 }}>Входные данные</h3>
                 <span>{[
-                    { description: 'Среднее время наработки на отказ одного компьютера (час)', label: 'tno', value: tno, onChange: onTnoChange },
-                    { description: 'Среднее время ремонта одного компьютера (час)', label: "to", value: to, onChange: onToChange },
-                    { description: 'Количество компьютеров', label: "N", value: N, onChange: onNChange },
-                    { description: 'Заработная плата (руб) специалиста за один час', label: "S1", value: S1, onChange: onS1Change },
-                    { description: 'Финансовые потери (руб) организации от неисправного компьютера за один час', label: "S", value: S, onChange: onSChange },
-                    { description: 'Количество знаков после запятой', label: "Nzn", value: Nzn, onChange: onNznChange },
-                ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)
+                    { description: 'Среднее время наработки на отказ одного компьютера (час)', id: 'tno', label: 't_но', value: tno, onChange: onTnoChange },
+                    { description: 'Среднее время ремонта одного компьютера (час)', id: "to", label: 't_о', value: to, onChange: onToChange },
+                    { description: 'Количество компьютеров', id: "N", value: N, onChange: onNChange },
+                    { description: 'Заработная плата (руб) специалиста за один час', id: "S1", label: 'S_1', value: S1, onChange: onS1Change },
+                    { description: 'Финансовые потери (руб) организации от неисправного компьютера за один час', id: "S", value: S, onChange: onSChange },
+                    { description: 'Количество знаков после запятой', id: "Nzn", label: 'N_зн', value: Nzn, onChange: onNznChange },
+                ].map((inputProps) => <Input isError={hasErrors(inputProps.id)} key={inputProps.id} {...inputProps} />)
                 }</span>
                 <h3 style={{ marginBottom: 0 }}>Количество ремонтников для трёх вариантов</h3>
                 <span>{[
-                    { label: "1", value: C1, onChange: onC1Change },
-                    { label: "2", value: C2, onChange: onC2Change },
-                    { label: "3", value: C3, onChange: onC3Change },
-                ].map((inputProps) => <Input isError={hasErrors(`C${inputProps.label}`)} key={inputProps.label} {...inputProps} />)}
+                    { id: "1", value: C1, onChange: onC1Change },
+                    { id: "2", value: C2, onChange: onC2Change },
+                    { id: "3", value: C3, onChange: onC3Change },
+                ].map((inputProps) => <Input isError={hasErrors(`C${inputProps.id}`)} key={inputProps.id} {...inputProps} />)}
                 </span>
             </form >
             <table>
