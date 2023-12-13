@@ -279,41 +279,47 @@ function MainPage() {
 
     return (
         <>
+            <h3>Выполнил: Пакало Александр Сергеевич, студент ИУ5-12М</h3>
             <form className="read-the-docs">
-                {[
-                    { label: 'tno', value: tno, onChange: onTnoChange },
-                    { label: "to", value: to, onChange: onToChange },
-                    { label: "N", value: N, onChange: onNChange },
-                    { label: "C1", value: C1, onChange: onC1Change },
-                    { label: "C2", value: C2, onChange: onC2Change },
-                    { label: "C3", value: C3, onChange: onC3Change },
-                    { label: "S1", value: S1, onChange: onS1Change },
-                    { label: "S", value: S, onChange: onSChange },
-                    { label: "Nzn", value: Nzn, onChange: onNznChange },
-                ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)}
-            </form>
+                <span>{[
+                    { description: 'Среднее время наработки на отказ одного компьютера (час)', label: 'tno', value: tno, onChange: onTnoChange },
+                    { description: 'Среднее время ремонта одного компьютера (час)', label: "to", value: to, onChange: onToChange },
+                    { description: 'Количество компьютеров', label: "N", value: N, onChange: onNChange },
+                    { description: 'Заработная плата (руб) специалиста за один час', label: "S1", value: S1, onChange: onS1Change },
+                    { description: 'Финансовые потери (руб) организации от неисправного компьютера за один час', label: "S", value: S, onChange: onSChange },
+                    { description: 'Количество знаков после запятой', label: "Nzn", value: Nzn, onChange: onNznChange },
+                ].map((inputProps) => <Input isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)
+                }</span>
+                <h3 style={{ marginBottom: 0 }}>Количество ремонтников для трёх вариантов</h3>
+                <span>{[
+                    { label: "1", value: C1, onChange: onC1Change },
+                    { label: "2", value: C2, onChange: onC2Change },
+                    { label: "3", value: C3, onChange: onC3Change },
+                ].map((inputProps) => <Input isError={hasErrors(`C${inputProps.label}`)} key={inputProps.label} {...inputProps} />)}
+                </span>
+            </form >
             <table>
                 <thead>
-                    <Tr header={true} label="C" values={CValues} />
+                    <Tr description="Количество ремонтников" header={true} label="C" values={CValues} />
                 </thead>
 
                 <tbody>
-                    <Tr formatValue={formatValue} label="Po" values={CValues.map((Ci) => mathP0(Ci, N, w))} />
-                    <Tr formatValue={formatValue} label="Q" values={QValues} />
-                    <Tr formatValue={formatValue} label="L" values={LValues} />
+                    <Tr description="Вероятность простоя" formatValue={formatValue} label="Po" values={CValues.map((Ci) => mathP0(Ci, N, w))} />
+                    <Tr description="Ср. количество компьютеров в очереди" formatValue={formatValue} label="Q" values={QValues} />
+                    <Tr description="Ср. количество компьютеров в системе" formatValue={formatValue} label="L" values={LValues} />
 
-                    <Tr formatValue={formatValue} label="U" values={UValues} />
-                    <Tr formatValue={formatValue} label="po" values={poValues} />
-                    <Tr formatValue={formatValue} label="n" values={nValues} />
+                    <Tr description="Ср. количество компьютеров на ремонте" formatValue={formatValue} label="U" values={UValues} />
+                    <Tr description="Коэффициент загрузки ремонтников" formatValue={formatValue} label="po" values={poValues} />
+                    <Tr description="Ср. количество исправных компьютеров" formatValue={formatValue} label="n" values={nValues} />
 
-                    <Tr formatValue={formatValue} label="pe" values={peValues} />
-                    <Tr formatValue={formatValue} label="W" values={WValues} />
-                    <Tr formatValue={formatValue} label="Tp" values={TpValues} />
-                    <Tr formatValue={formatValue} label="Tc" values={TcValues} />
+                    <Tr description="Коэффициент загрузки компьютеров" formatValue={formatValue} label="pe" values={peValues} />
+                    <Tr description="Ср. время нахождение в очереди" formatValue={formatValue} label="W" values={WValues} />
+                    <Tr description="Ср. время пребывания компьютера в системе" formatValue={formatValue} label="Tp" values={TpValues} />
+                    <Tr description="Ср. время цикла для компьютера" formatValue={formatValue} label="Tc" values={TcValues} />
 
-                    <Tr formatValue={formatValue} label="pe/po" values={peValues.map((pei, i) => pei / poValues[i])} />
+                    <Tr description="Отношение загрузки к ремонту" formatValue={formatValue} label="pe/po" values={peValues.map((pei, i) => pei / poValues[i])} />
 
-                    <Tr formatValue={formatValue} label="Y" values={YValues} />
+                    <Tr description="Затраты" formatValue={formatValue} label="Y" values={YValues} />
                 </tbody>
             </table>
             <Chart data={data} />

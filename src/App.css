@@ -14,11 +14,13 @@ label {
 }
 
 table {
+    display: inline-block;
     margin-top: 24px;
     border-collapse: collapse;
 }
 
 tr, td {
+    min-width: 100px;
     padding: 4px 8px;
 }
 

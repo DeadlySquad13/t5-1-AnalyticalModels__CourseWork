@@ -16,10 +16,10 @@ export type Data = Array<{
 // website examples showcase many properties,
 // you'll often use just a few of them.
 export const Chart = ({ data }: { data: Data }) => (
-    <div style={{ height: '350px', width: '500px' }}>
+    <div style={{ display: 'inline-block', height: '450px', width: '600px' }}>
         <ResponsiveLine
             data={data}
-            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            margin={{ top: 50, right: 110, bottom: 50, left: 70 }}
             xScale={{ type: 'point' }}
             yScale={{
                 type: 'linear',
@@ -35,7 +35,7 @@ export const Chart = ({ data }: { data: Data }) => (
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'transportation',
+                legend: 'Количество ремонтников',
                 legendOffset: 36,
                 legendPosition: 'middle'
             }}
@@ -43,8 +43,8 @@ export const Chart = ({ data }: { data: Data }) => (
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 0,
-                legend: 'count',
-                legendOffset: -40,
+                legend: 'Затраты',
+                legendOffset: -50,
                 legendPosition: 'middle'
             }}
             pointSize={10}
