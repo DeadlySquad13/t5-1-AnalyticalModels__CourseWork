@@ -3,67 +3,6 @@ import { Input } from '../input/input';
 import { Tr } from '../table/tr';
 import '../App.css'
 
-// FIX: Limit.
-function factorial(n: number): number {
-    if (n <= 0) return 1;
-
-    return n ? n * factorial(n - 1) : 1;
-}
-
-interface Params {
-    L: number;
-    tno: number;
-    N: number;
-}
-
-function mathTp({ L, tno, N }: Params) {
-    return (L * tno) / (N - L);
-}
-
-function mathTc(Tp: number, tno: number) {
-    return Tp + tno;
-}
-
-function mathPe(Tc: number, tno: number) {
-    return tno / Tc;
-}
-
-function mathW(Tp: number, to: number) {
-    return Tp - to;
-}
-
-/* $("#go").click(function () {
-    $("#container").html("");
-    var chart = anychart.line([
-        { x: C, value: y1 },
-        { x: (C + C2) / 2, value: (y1 + y2) / 2 - (y1 - y2) / 4 },
-        { x: C2, value: y2 },
-        { x: (C2 + C3) / 2, value: (y2 + y3) / 2 + (y2 - y3) / 4 },
-        { x: C3, value: y3 },
-    ]);
-    var yTitle = chart.yAxis().title();
-    yTitle.enabled(true);
-    yTitle.text("Затраты, руб/час");
-    yTitle.align("top");
-    yTitle.orientation("top");
-    yTitle.fontSize(15);
-    yTitle.fontColor("black");
-    var xTitle = chart.xAxis().title();
-    xTitle.enabled(true);
-    xTitle.text("Количество ремонтников");
-    xTitle.align("right");
-    xTitle.orientation("bottom");
-    xTitle.fontSize(15);
-    xTitle.fontColor("black");
-    chart.title("");
-    chart.title().align("center");
-    chart.title().fontSize(25);
-    chart.title().fontColor("black");
-    chart.container("container").draw();
-
-    $(".anychart-credits").hide();
-}); */
-
 const DEFAULT = {
     N: 10,
     tk: 3,
@@ -84,6 +23,15 @@ interface InputError { label: string, message: string }
 
 const MAX_ITERATIONS = 99999;
 
+const K1_MIN = 0.9;
+const K1_MAX = 0.999995;
+
+const DELTA_MIN = 0.000001;
+const DELTA_MAX = 0.9;
+
+const K2_MIN = 10;
+const K2_MAX = 100000;
+
 export function ServerPage() {
     const [errors, setErrors] = useState<InputError[]>([])
     const setError = (error: InputError) => setErrors((errors) => [...errors, error])
@@ -91,18 +39,7 @@ export function ServerPage() {
 
     const [N, setN] = useState(DEFAULT.N)
     const onNChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const N = Number(e.target.value);
-
-        if (N > 101) {
-            return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 100" })
-        }
-
-        if (N < 0) {
-            return setError({ label: "N", message: "Сделайте, пожалуйста, N неотрицательным" })
-        }
-
-        clearErrorsForInput('N')
-        setN(N)
+        setN(Number(e.target.value))
     }
 
     const [tk, setTk] = useState(DEFAULT.tk)
@@ -147,17 +84,38 @@ export function ServerPage() {
 
     const [K1, setK1] = useState(DEFAULT.K1)
     const onK1Change = (e: ChangeEvent<HTMLInputElement>) => {
-        setK1(Number(e.target.value))
+        const K1 = Number(e.target.value)
+
+        if (K1 < K1_MIN || K1 > K1_MAX) {
+            return setError({ label: "K1", message: `Недопустимое значение! Установите K1 в пределах [${K1_MIN}, ${K1_MAX}]` });
+        }
+
+        clearErrorsForInput('K1');
+        setK1(K1);
     }
 
     const [delta, setDelta] = useState(DEFAULT.delta)
     const onDeltaChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setDelta(Number(e.target.value))
+        const delta = Number(e.target.value)
+
+        if (delta < DELTA_MIN || delta > DELTA_MAX) {
+            return setError({ label: "delta", message: `Недопустимое значение! Установите delta в пределах [${DELTA_MIN}, ${DELTA_MAX}]`});
+        }
+
+        clearErrorsForInput("delta")
+        setDelta(delta);
     }
 
     const [K2, setK2] = useState(DEFAULT.K2)
     const onK2Change = (e: ChangeEvent<HTMLInputElement>) => {
-        setK2(Number(e.target.value))
+        const K2 = Number(e.target.value)
+
+        if (K2 < K2_MIN || K2 > K2_MAX) {
+            return setError({ label: "K2", message: `Недопустимое значение! Установите K2 в пределах [${K2_MIN}, ${K2_MAX}]` });
+        }
+
+        clearErrorsForInput('K2');
+        setK2(K2);
     }
 
     const [Nzn, setNzn] = useState(DEFAULT.Nzn)
@@ -166,6 +124,10 @@ export function ServerPage() {
 
         if (Nzn > 10) {
             return setError({ label: "Nzn", message: "Слишком большое значение для Nzn! Сделайте, пожалуйста, его меньше 10" })
+        }
+
+        if (Nzn < 1) {
+            return setError({ label: "Nzn", message: "Слишком малое значение для Nzn! Сделайте, пожалуйста, его больше 1" })
         }
 
         clearErrorsForInput('Nzn')
@@ -243,11 +205,11 @@ export function ServerPage() {
                 <h3 style={{ marginBottom: 0 }}>Параметры управления</h3>
                 <h4 style={{ marginTop: 0, marginBottom: 0 }}>Точность вычислений</h4>
                 <span>{[
-                    { label: 'K1', value: K1, onChange: onK1Change },
-                    { label: "K2", value: K2, onChange: onK2Change },
-                    { label: "delta", value: delta, onChange: onDeltaChange },
-                    { description: 'Количество знаков после запятой', label: "Nзн", value: Nzn, onChange: onNznChange },
-                ].map((inputProps) => <Input isError={hasErrors(`C${inputProps.label}`)} key={inputProps.label} {...inputProps} />)}
+                    { label: 'K1', value: K1, onChange: onK1Change, step: 0.001 },
+                    { label: "K2", value: K2, onChange: onK2Change, step: 10 },
+                    { label: "delta", value: delta, onChange: onDeltaChange, step: 0.01 },
+                    { description: 'Количество знаков после запятой', label: "Nzn", value: Nzn, onChange: onNznChange},
+                ].map((inputProps) => <Input  isError={hasErrors(inputProps.label)} key={inputProps.label} {...inputProps} />)}
                 </span>
             </form >
             <table>

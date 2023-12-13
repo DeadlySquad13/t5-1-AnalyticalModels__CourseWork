@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react';
 
 import './input.css'
 
-export interface InputProps extends Pick<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+export interface InputProps extends Pick<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value' | 'step'> {
     label: string;
     isError: boolean;
     description?: string;
