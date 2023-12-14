@@ -1,8 +1,9 @@
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useMemo, useState, MouseEvent } from 'react'
 import { Input } from '../input/input';
 import { Tr } from '../table/tr';
 import '../App.css'
 import { Chart } from '../chart/chart';
+import { Button } from '../button/button';
 
 // FIX: Limit.
 function factorial(n: number): number {
@@ -156,8 +157,8 @@ export function ServicePage() {
     const onNChange = (e: ChangeEvent<HTMLInputElement>) => {
         const N = Number(e.target.value);
 
-        if (N > 101) {
-            return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 100" })
+        if (N > 151) {
+            return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 150" })
         }
 
         if (N < 0) {
@@ -211,22 +212,57 @@ export function ServicePage() {
 
     const w = to / tno;
 
-    const formatValue = (value: number) => value.toFixed(Math.max(Nzn, 0))
+    const [v, setValues] = useState<
+    {
+            CValues: number[],
+            QValues: number[],
+            LValues: number[],
+            UValues: number[],
+            poValues: number[],
+            nValues: number[],
+            TpValues: number[],
+            TcValues: number[],
+            peValues: number[],
+            WValues: number[],
+            YValues: number[],
+            Nzn: number,
+        } | undefined
+    >(undefined)
 
-    const CValues = [C1, C2, C3];
+    const formatValue = (value: number) => value.toFixed(Math.max(v?.Nzn || 3, 0))
 
-    const QValues = CValues.map((Ci) => mathQ(Ci, N, w));
-    const LValues = CValues.map((Ci) => mathL(Ci, N, w));
+    const calculate = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        const CValues = [C1, C2, C3];
 
-    const UValues = CValues.map((_, i) => LValues[i] - QValues[i]);
-    const poValues = CValues.map((Ci, i) => UValues[i] / Ci);
-    const nValues = LValues.map((Li) => N - Li);
+        const QValues = CValues.map((Ci) => mathQ(Ci, N, w));
+        const LValues = CValues.map((Ci) => mathL(Ci, N, w));
 
-    const TpValues = LValues.map((Li) => mathTp({ L: Li, tno, N }));
-    const TcValues = TpValues.map((Tpi) => mathTc(Tpi, tno));
-    const peValues = TcValues.map((Tci) => mathPe(Tci, tno));
-    const WValues = TpValues.map((Tpi) => mathW(Tpi, to));
-    const YValues = CValues.map((Ci, i) => Ci * S1 + LValues[i] * S)
+        const UValues = CValues.map((_, i) => LValues[i] - QValues[i]);
+        const poValues = CValues.map((Ci, i) => UValues[i] / Ci);
+        const nValues = LValues.map((Li) => N - Li);
+
+        const TpValues = LValues.map((Li) => mathTp({ L: Li, tno, N }));
+        const TcValues = TpValues.map((Tpi) => mathTc(Tpi, tno));
+        const peValues = TcValues.map((Tci) => mathPe(Tci, tno));
+        const WValues = TpValues.map((Tpi) => mathW(Tpi, to));
+        const YValues = CValues.map((Ci, i) => Ci * S1 + LValues[i] * S)
+
+        setValues({
+            CValues,
+            QValues,
+            LValues,
+            UValues,
+            poValues,
+            nValues,
+            TpValues,
+            TcValues,
+            peValues,
+            WValues,
+            YValues,
+            Nzn,
+        })
+    }
 
     const hasErrors = (label: string) => !!errors.find((error) => error.label === label);
 
@@ -235,18 +271,54 @@ export function ServicePage() {
         data: [
             {
                 x: C1,
-                y: YValues[0]
+                y: v?.YValues[0] || 0,
             },
             {
                 x: C2,
-                y: YValues[1],
+                y: v?.YValues[1] || 0,
             },
             {
                 x: C3,
-                y: YValues[2]
+                y: v?.YValues[2] || 0,
             }
         ]
-    }], [C1, C2, C3, YValues])
+    }], [C1, C2, C3, v?.YValues])
+
+    const calcutaionsBlock = useMemo(() => {
+        if (!v) {
+            return null;
+        }
+
+        return (
+                <>
+                    <table>
+                        <thead>
+                            <Tr description="Количество ремонтников" header={true} label="C" values={v.CValues} />
+                        </thead>
+
+                        <tbody>
+                            <Tr description="Вероятность простоя" formatValue={formatValue} label="P_0" values={v.CValues.map((Ci) => mathP0(Ci, N, w))} />
+                            <Tr description="Ср. количество компьютеров в очереди" formatValue={formatValue} label="Q" values={v.QValues} />
+                            <Tr description="Ср. количество компьютеров в системе" formatValue={formatValue} label="L" values={v.LValues} />
+
+                            <Tr description="Ср. количество компьютеров на ремонте" formatValue={formatValue} label="U" values={v.UValues} />
+                            <Tr description="Коэффициент загрузки ремонтников" formatValue={formatValue} label="ρ_o" values={v.poValues} />
+                            <Tr description="Ср. количество исправных компьютеров" formatValue={formatValue} label="n" values={v.nValues} />
+
+                            <Tr description="Коэффициент загрузки компьютеров" formatValue={formatValue} label="ρ_e" values={v.peValues} />
+                            <Tr description="Ср. время нахождение в очереди" formatValue={formatValue} label="W" values={v.WValues} />
+                            <Tr description="Ср. время пребывания компьютера в системе" formatValue={formatValue} label="Tp" values={v.TpValues} />
+                            <Tr description="Ср. время цикла для компьютера" formatValue={formatValue} label="T_c" values={v.TcValues} />
+
+                            <Tr description="Отношение загрузки к ремонту" formatValue={formatValue} label="ρe/ρo" values={v.peValues.map((pei, i) => pei / v.poValues[i])} />
+
+                            <Tr description="Затраты" formatValue={formatValue} label="Y" values={v.YValues} />
+                        </tbody>
+                    </table>
+                    <Chart data={data} />
+                </>
+            )
+        }, [v])
 
     return (
         <>
@@ -269,32 +341,9 @@ export function ServicePage() {
                     { id: "3", value: C3, onChange: onC3Change },
                 ].map((inputProps) => <Input isError={hasErrors(`C${inputProps.id}`)} key={inputProps.id} {...inputProps} />)}
                 </span>
+                <Button onClick={calculate}>Расcчитать</Button>
             </form >
-            <table>
-                <thead>
-                    <Tr description="Количество ремонтников" header={true} label="C" values={CValues} />
-                </thead>
-
-                <tbody>
-                    <Tr description="Вероятность простоя" formatValue={formatValue} label="P_0" values={CValues.map((Ci) => mathP0(Ci, N, w))} />
-                    <Tr description="Ср. количество компьютеров в очереди" formatValue={formatValue} label="Q" values={QValues} />
-                    <Tr description="Ср. количество компьютеров в системе" formatValue={formatValue} label="L" values={LValues} />
-
-                    <Tr description="Ср. количество компьютеров на ремонте" formatValue={formatValue} label="U" values={UValues} />
-                    <Tr description="Коэффициент загрузки ремонтников" formatValue={formatValue} label="ρ_o" values={poValues} />
-                    <Tr description="Ср. количество исправных компьютеров" formatValue={formatValue} label="n" values={nValues} />
-
-                    <Tr description="Коэффициент загрузки компьютеров" formatValue={formatValue} label="ρ_e" values={peValues} />
-                    <Tr description="Ср. время нахождение в очереди" formatValue={formatValue} label="W" values={WValues} />
-                    <Tr description="Ср. время пребывания компьютера в системе" formatValue={formatValue} label="Tp" values={TpValues} />
-                    <Tr description="Ср. время цикла для компьютера" formatValue={formatValue} label="T_c" values={TcValues} />
-
-                    <Tr description="Отношение загрузки к ремонту" formatValue={formatValue} label="ρe/ρo" values={peValues.map((pei, i) => pei / poValues[i])} />
-
-                    <Tr description="Затраты" formatValue={formatValue} label="Y" values={YValues} />
-                </tbody>
-            </table>
-            <Chart data={data} />
+            {calcutaionsBlock}
         </>
     )
 }
