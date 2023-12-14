@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useMemo, useState, MouseEvent } from 'react'
 import { Input } from '../input/input';
 import { Tr } from '../table/tr';
 import '../App.css'
+import { Button } from '../button/button';
 
 const DEFAULT = {
     N: 100,
@@ -185,6 +186,41 @@ export function ServerPage() {
     const loadOfStationUser = Tp / Tcycle;
     const meanWorkingComputers = N * (T0 + Tp) / Tcycle
 
+    const [observer, setObserver] = useState(0)
+
+    const calculate = (e: MouseEvent) => {
+        e.preventDefault()
+        setObserver((observer) => observer + 1);
+    }
+
+    const table = useMemo(() => {
+            return (
+                <table>
+                    <thead>
+                        <Tr description="Описание" header={true} label="Параметр" values={["Значение"]} />
+                    </thead>
+
+                    <tbody>
+                        <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="ρ_PC" values={[stationLoad]} />
+                        <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="ρ_польз" values={[loadOfStationUser]} />
+                        <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="N_PC" values={[meanWorkingComputers]} />
+
+                        <Tr description="Загрузка канала" formatValue={formatValue} label="ρ_к" values={[rok]} />
+                        <Tr description="Загрузка процессора" formatValue={formatValue} label="ρ_пр" values={[ropr]} />
+                        <Tr description="Загрузка дисков" formatValue={formatValue} label="ρ_д" values={[rod]} />
+
+                        <Tr description="Ср. время цикла системы" formatValue={formatValue} label="T_цикла" values={[Tcycle]} />
+                        <Tr description="Ср. время формирования запроса от рабочей станции сети к базе данных" formatValue={formatValue} label="T_р" values={[Treac]} />
+
+                        <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="λ_ф1" values={[Lstart]} />
+                        <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="λ_ф" values={[Lf1]} />
+
+                        <Tr description="Количество итераций" label="n" values={[n]} />
+                    </tbody>
+                </table>
+            )
+        }, [observer])
+
     return (
         <>
             <h3>Выполнил: Пакало Александр Сергеевич, студент ИУ5-12М</h3>
@@ -211,30 +247,11 @@ export function ServerPage() {
                     { description: 'Количество знаков после запятой', id: "Nzn", label: 'N_зн', value: Nzn, onChange: onNznChange},
                 ].map((inputProps) => <Input  isError={hasErrors(inputProps.id)} key={inputProps.id} {...inputProps} />)}
                 </span>
+                <div>
+                <Button onClick={calculate}>Расcчитать</Button>
+                </div>
+                {table}
             </form >
-            <table>
-                <thead>
-                    <Tr description="Описание" header={true} label="Параметр" values={["Значение"]} />
-                </thead>
-
-                <tbody>
-                    <Tr description="Загрузка рабочей станции" formatValue={formatValue} label="ρ_PC" values={[stationLoad]} />
-                    <Tr description="Загрузка пользователя рабочей станции" formatValue={formatValue} label="ρ_польз" values={[loadOfStationUser]} />
-                    <Tr description="Ср. количество работающих PC" formatValue={formatValue} label="N_PC" values={[meanWorkingComputers]} />
-
-                    <Tr description="Загрузка канала" formatValue={formatValue} label="ρ_к" values={[rok]} />
-                    <Tr description="Загрузка процессора" formatValue={formatValue} label="ρ_пр" values={[ropr]} />
-                    <Tr description="Загрузка дисков" formatValue={formatValue} label="ρ_д" values={[rod]} />
-
-                    <Tr description="Ср. время цикла системы" formatValue={formatValue} label="T_цикла" values={[Tcycle]} />
-                    <Tr description="Ср. время формирования запроса от рабочей станции сети к базе данных" formatValue={formatValue} label="T_р" values={[Treac]} />
-
-                    <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="λ_ф1" values={[Lstart]} />
-                    <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="λ_ф" values={[Lf1]} />
-
-                    <Tr description="Количество итераций" label="n" values={[n]} />
-                </tbody>
-            </table>
         </>
     )
 }
