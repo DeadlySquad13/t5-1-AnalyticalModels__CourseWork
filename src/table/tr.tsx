@@ -1,3 +1,5 @@
+import { formatLabel } from "../utils";
+
 export interface TrProps<T> {
     label: string;
     values: T[];
@@ -10,7 +12,7 @@ export const Tr = <T,>(props: TrProps<T>) => {
     return (
         <tr>
             {props.description && <td>{props.description}</td>}
-            {props.header ? <th>{props.label}</th> : <td>{props.label}</td>}
+            {props.header ? <th>{formatLabel(props.label)}</th> : <td>{formatLabel(props.label)}</td>}
             {props.values.map((value, i) => {
                 const formattedValue = !props.formatValue ? String(value) : props.formatValue(value);
 

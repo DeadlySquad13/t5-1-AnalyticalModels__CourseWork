@@ -4,9 +4,10 @@ import './link.css';
 export interface LinkProps {
     href: string;
     children: ReactNode;
+    preset?: 'normal' | 'back'
 }
 
-export const Link = ({ href, children }: LinkProps) => {
+export const Link = ({ href, children, preset }: LinkProps) => {
     const formattedHref = !href.startsWith('/') ? href : href.slice(1)
 
     const baseUrl = import.meta.env.BASE_URL
@@ -14,7 +15,7 @@ export const Link = ({ href, children }: LinkProps) => {
     const hrefWithBaseUrl = formattedBaseUrl + formattedHref
     console.log(hrefWithBaseUrl)
 
-    return <a className='link' href={hrefWithBaseUrl}>{children}</a>;
+    return <a className={`link link_${preset || 'normal'}`} href={hrefWithBaseUrl}>{children}</a>;
 };
 
 
