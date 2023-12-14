@@ -4,7 +4,7 @@ import { Tr } from '../table/tr';
 import '../App.css'
 
 const DEFAULT = {
-    N: 10,
+    N: 100,
     tk: 3,
     td: 15,
     T0: 50,
@@ -227,7 +227,7 @@ export function ServerPage() {
                     <Tr description="Загрузка дисков" formatValue={formatValue} label="ρ_д" values={[rod]} />
 
                     <Tr description="Ср. время цикла системы" formatValue={formatValue} label="T_цикла" values={[Tcycle]} />
-                    <Tr description="Ср. время реакции системы" formatValue={formatValue} label="T_р" values={[Treac]} />
+                    <Tr description="Ср. время формирования запроса от рабочей станции сети к базе данных" formatValue={formatValue} label="T_р" values={[Treac]} />
 
                     <Tr description="Начальная интенсивность фонового потока" formatValue={formatValue} label="λ_ф1" values={[Lstart]} />
                     <Tr description="Конечная интенсивность фонового потока" formatValue={formatValue} label="λ_ф" values={[Lf1]} />
