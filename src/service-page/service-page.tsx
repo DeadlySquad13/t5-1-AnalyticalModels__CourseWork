@@ -5,10 +5,15 @@ import '../App.css'
 import { Chart } from '../chart/chart';
 
 // FIX: Limit.
-function factorial(n: number): number {
-    if (n <= 0) return 1;
+function factorial(n: number): bigint {
+    const table = []
+    table[0] = BigInt(1); // base
 
-    return n ? n * factorial(n - 1) : 1;
+    for (let i = 1; i <= n; i++) {
+        table[i] = BigInt(i) * BigInt(table[i - 1]);
+    }
+
+    return table[n]
 }
 
 function mathP0(c: number, N: number, w: number) {
@@ -48,7 +53,7 @@ function mathP0(c: number, N: number, w: number) {
 function mathQ(c: number, N: number, w: number) {
     var P0 = mathP0(c, N, w);
     var k = c + 1;
-    var res = +0;
+    var res = BigInt(+0);
 
     var Nfac = factorial(N);
     var cfac = factorial(c);
@@ -58,7 +63,7 @@ function mathQ(c: number, N: number, w: number) {
         var wpow = Math.pow(w, k);
         var cpow = Math.pow(c, k - c);
         var Nkfac = factorial(N - k);
-        res = res + ((k - c) * Nfac * P0 * wpow) / (cpow * cfac * Nkfac);
+        res = res + ((BigInt(k) - BigInt(c)) * Nfac * BigInt(P0) * BigInt(wpow)) / (BigInt(cpow) * cfac * Nkfac);
         k++;
     }
 
@@ -67,9 +72,9 @@ function mathQ(c: number, N: number, w: number) {
 
 function mathL(c: number, N: number, w: number) {
     var Nfac = factorial(N);
-    var res = +0;
-    var res1 = +0;
-    var res2 = +0;
+    var res = BigInt(+0);
+    var res1 = BigInt(+0);
+    var res2 = BigInt(+0);
     var P0 = mathP0(c, N, w);
 
     var n = +1;
@@ -79,7 +84,7 @@ function mathL(c: number, N: number, w: number) {
         var nfac = factorial(n);
         var Nnfac = factorial(N - n);
 
-        res1 = res1 + ((Nfac * wpow) / (nfac * Nnfac)) * n * P0;
+        res1 = BigInt(res1) + ((Nfac * BigInt(wpow)) / (nfac * Nnfac)) * BigInt(n) * BigInt(P0);
         n++;
     }
 
@@ -91,7 +96,7 @@ function mathL(c: number, N: number, w: number) {
         var Nnfac = factorial(N - n);
         var cpow = Math.pow(c, n - c);
 
-        res2 = res2 + ((Nfac * wpow) / (cpow * cfac * Nnfac)) * n * P0;
+        res2 = BigInt(res2) + ((Nfac * BigInt(wpow)) / (BigInt(cpow) * cfac * Nnfac)) * BigInt(n) * BigInt(P0);
         n++;
     }
 
@@ -102,24 +107,24 @@ function mathL(c: number, N: number, w: number) {
 
 
 interface Params {
-    L: number;
-    tno: number;
-    N: number;
+    L: bigint;
+    tno: bigint;
+    N: bigint;
 }
 
 function mathTp({ L, tno, N }: Params) {
     return (L * tno) / (N - L);
 }
 
-function mathTc(Tp: number, tno: number) {
+function mathTc(Tp: bigint, tno: bigint) {
     return Tp + tno;
 }
 
-function mathPe(Tc: number, tno: number) {
+function mathPe(Tc: bigint, tno: bigint) {
     return tno / Tc;
 }
 
-function mathW(Tp: number, to: number) {
+function mathW(Tp: bigint, to: bigint) {
     return Tp - to;
 }
 
@@ -156,9 +161,9 @@ export function ServicePage() {
     const onNChange = (e: ChangeEvent<HTMLInputElement>) => {
         const N = Number(e.target.value);
 
-        if (N > 101) {
-            return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 100" })
-        }
+        /* if (N > 151) { */
+        /*     return setError({ label: "N", message: "Слишком большое значение для N! Сделайте, пожалуйста, его меньше или равным 150" }) */
+        /* } */
 
         if (N < 0) {
             return setError({ label: "N", message: "Сделайте, пожалуйста, N неотрицательным" })
@@ -219,14 +224,14 @@ export function ServicePage() {
     const LValues = CValues.map((Ci) => mathL(Ci, N, w));
 
     const UValues = CValues.map((_, i) => LValues[i] - QValues[i]);
-    const poValues = CValues.map((Ci, i) => UValues[i] / Ci);
-    const nValues = LValues.map((Li) => N - Li);
+    const poValues = CValues.map((Ci, i) => UValues[i] / BigInt(Ci));
+    const nValues = LValues.map((Li) => BigInt(N) - Li);
 
-    const TpValues = LValues.map((Li) => mathTp({ L: Li, tno, N }));
-    const TcValues = TpValues.map((Tpi) => mathTc(Tpi, tno));
-    const peValues = TcValues.map((Tci) => mathPe(Tci, tno));
-    const WValues = TpValues.map((Tpi) => mathW(Tpi, to));
-    const YValues = CValues.map((Ci, i) => Ci * S1 + LValues[i] * S)
+    const TpValues = LValues.map((Li) => mathTp({ L: Li, tno: BigInt(tno), N: BigInt(N) }));
+    const TcValues = TpValues.map((Tpi) => mathTc(Tpi, BigInt(tno)));
+    const peValues = TcValues.map((Tci) => mathPe(Tci, BigInt(tno)));
+    const WValues = TpValues.map((Tpi) => mathW(Tpi, BigInt(to)));
+    const YValues = CValues.map((Ci, i) => BigInt(Ci) * BigInt(S1) + LValues[i] * BigInt(S))
 
     const hasErrors = (label: string) => !!errors.find((error) => error.label === label);
 
